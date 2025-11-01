@@ -30,7 +30,7 @@ function App() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/extract-placeholders', formData, {
+      const response = await axios.post('https://lexsy-backend-6dcj.onrender.com/api/extract-placeholders', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
