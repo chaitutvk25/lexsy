@@ -10,11 +10,23 @@ You can access the live application here: **[https://fluffy-cascaron-30b6e1.netl
 
 The backend for this project is hosted on a free-tier service that may spin down after a period of inactivity. As a result, **the very first document upload may take up to 60 seconds to process** as the server wakes up. Subsequent requests will be much faster.
 
-## How It Works
+## How to Use
 
-1.  **Upload:** Upload a `.docx` file containing placeholders in the `{{placeholder_name}}` format.
-2.  **Fill:** The application will ask for the value of each placeholder one by one.
-3.  **Download:** Once all placeholders are filled, you can download the completed `.docx` file.
+### 1. Create a Template Document
+
+*   Using an editor like Microsoft Word or Google Docs, create a new `.docx` document.
+*   Write your template text as you normally would.
+*   Anywhere you need a value to be filled in later, use a placeholder with double curly braces: `{{placeholder_name}}`.
+
+**Example Template Text:**
+> This agreement is made between **{{company_name}}** and **{{client_name}}**. The effective date is **{{date}}**.
+
+### 2. Use the Web Application
+
+1.  **Go to the Live Site:** [https://fluffy-cascaron-30b6e1.netlify.app/](https://fluffy-cascaron-30b6e1.netlify.app/)
+2.  **Upload:** Click to upload the `.docx` template file you just created.
+3.  **Fill In Values:** The application will then ask you for each placeholder's value, one by one. For the example above, it would first ask for `company_name`.
+4.  **Download:** After you provide the last value, a "Download" button will appear. Click it to download your final, completed document.
 
 ## Tech Stack
 
