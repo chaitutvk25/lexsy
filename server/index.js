@@ -9,7 +9,11 @@ const lodash = require('lodash'); // Although not used directly, it might be a p
 const app = express();
 const port = 3001;
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://fluffy-cascaron-30b6e1.netlify.app',
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
