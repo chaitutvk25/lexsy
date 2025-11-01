@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Box, Button, Stepper, Step, StepLabel } from '@mui/material';
+import { Container, Typography, Box, Button, Stepper, Step, StepLabel, CircularProgress } from '@mui/material';
 
-// Define the states of the application
 const AppState = {
   UPLOAD: 'UPLOAD',
   FILLING: 'FILLING',
@@ -15,6 +14,8 @@ function App() {
   const [placeholders, setPlaceholders] = useState([]);
   const [userData, setUserData] = useState({});
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [longLoadMessage, setLongLoadMessage] = useState('');
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -25,6 +26,13 @@ function App() {
       alert('Please select a file first.');
       return;
     }
+
+    setIsLoading(true);
+    setLongLoadMessage('');
+
+    const longLoadTimer = setTimeout(() => {
+      setLongLoadMessage('Server is waking up, this may take a moment...');
+    }, 5000); // 5 seconds
 
     const formData = new FormData();
     formData.append('file', file);
@@ -44,6 +52,10 @@ function App() {
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Error uploading file. Please check the console for details.');
+    } finally {
+      clearTimeout(longLoadTimer);
+      setIsLoading(false);
+      setLongLoadMessage('');
     }
   };
 
@@ -62,6 +74,7 @@ function App() {
   };
 
   const handleDownload = async () => {
+    // Similar loading logic could be added here if downloads are slow
     const formData = new FormData();
     formData.append('file', file);
     formData.append('data', JSON.stringify(userData));
@@ -92,13 +105,25 @@ function App() {
   };
 
   const renderContent = () => {
+    if (isLoading) {
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 4 }}>
+          <CircularProgress />
+          <Typography variant="h6" sx={{ mt: 2 }}>Processing...</Typography>
+          {longLoadMessage && <Typography sx={{ mt: 1 }}>{longLoadMessage}</Typography>}
+        </Box>
+      );
+    }
+
     switch (appState) {
       case AppState.UPLOAD:
         return (
           <Box>
             <Typography variant="h5" gutterBottom>Upload Document</Typography>
             <input type="file" accept=".docx" onChange={handleFileChange} />
-            <Button variant="contained" onClick={handleUpload} sx={{ mt: 2 }}>Upload and Start</Button>
+            <Button variant="contained" onClick={handleUpload} sx={{ mt: 2 }} disabled={isLoading}>
+              Upload and Start
+            </Button>
           </Box>
         );
       case AppState.FILLING:
